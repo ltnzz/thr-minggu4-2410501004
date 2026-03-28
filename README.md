@@ -27,8 +27,6 @@ Aplikasi ini menggunakan berbagai hooks bawaan React maupun custom hooks untuk m
 
 ## Screenshot
 
-_(Catatan: Jangan lupa ganti URL gambar di bawah dengan path screenshot aplikasimu yang sebenarnya)_
-
 <div style="display: flex; flex-direction: row; gap: 10px;">
   <img src="./screenshots/home-screen.jpeg" alt="Home Screen" width="250"/>
   <img src="./screenshots/budget-screen.jpeg" alt="Budget Screen" width="250"/>
