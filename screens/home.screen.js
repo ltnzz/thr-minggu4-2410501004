@@ -16,7 +16,8 @@ import { usePackingList } from '../hooks/use.packing';
 import { useBudget } from '../hooks/use.budget';
 import { useState } from 'react';
 import { useTheme } from '../hooks/use.theme';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { useRotation } from '../hooks/use.rotation';
 
 export const HomeScreen = () => {
     const navigation = useNavigation();
@@ -24,12 +25,7 @@ export const HomeScreen = () => {
     const [showResetModal, setShowResetModal] = useState(false);
     const { colors, isDarkMode, toggleTheme } = useTheme();
 
-    const rotation = useSharedValue(0);
-    const animatedIconStyle = useAnimatedStyle(() => {
-        return {
-            transform: [{ rotate: `${rotation.value}deg` }],
-        };
-    });
+    const { animatedStyle: animatedIconStyle, toggleRotation } = useRotation();
 
     const {
         budget,
@@ -173,7 +169,7 @@ export const HomeScreen = () => {
                     <TouchableOpacity
                         onPress={() => {
                             toggleTheme();
-                            rotation.value = withSpring(rotation.value + 180);
+                            toggleRotation();
                         }}
                         style={[
                             styles.themeToggleBtn,
