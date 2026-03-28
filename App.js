@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { TabNavigator } from './navigation/tab.navigation';
+import { BudgetProvider } from './context/budget.context';
+import { PackingProvider } from './context/packing.context';
+import { VisitProvider } from './context/visit.context';
+import { ThemeProvider } from './context/theme.context';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    return (
+        <ThemeProvider>
+            <BudgetProvider>
+                <PackingProvider>
+                    <VisitProvider>
+                        <GestureHandlerRootView style={{ flex: 1 }}>
+                            <NavigationContainer>
+                                <TabNavigator />
+                            </NavigationContainer>
+                        </GestureHandlerRootView>
+                    </VisitProvider>
+                </PackingProvider>
+            </BudgetProvider>
+        </ThemeProvider>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
