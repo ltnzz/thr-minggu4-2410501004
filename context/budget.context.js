@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useMemo } from 'react';
+import { createContext, useReducer, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const BudgetContext = createContext();
@@ -46,6 +46,7 @@ const budgetReducer = (state, action) => {
 
 export const BudgetProvider = ({ children }) => {
     const [state, dispatch] = useReducer(budgetReducer, initialState);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -54,18 +55,21 @@ export const BudgetProvider = ({ children }) => {
                 if (data) dispatch({ type: 'RESTORE_BUDGET', payload: JSON.parse(data) });
             } catch (error) {
                 console.error('Failed to load budget data', error);
+            } finally {
+                setIsLoaded(true);
             }
         };
         load();
     }, []);
 
     useEffect(() => {
+        if (!isLoaded) return;
         try {
             AsyncStorage.setItem('@mudik_budget', JSON.stringify(state));
         } catch (error) {
             console.error('Failed to save budget data', error);
         }
-    }, [state]);
+    }, [state, isLoaded]);
 
     const contextValue = useMemo(() => ({ state, dispatch }), [state]);
 

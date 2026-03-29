@@ -22,20 +22,20 @@ export const lightColors = {
 };
 
 export const darkColors = {
-    background: '#111827', // Gray 900
-    card: '#1F2937',       // Gray 800
-    text: '#F9FAFB',       // Gray 50
-    textMuted: '#9CA3AF',  // Gray 400
-    border: '#374151',     // Gray 700
-    primary: '#6366F1',    // Indigo 500
-    surfaceBudget: '#1E1B4B', // Indigo 950
-    surfaceBudgetIcon: '#312E81', // Indigo 900
-    surfacePacking: '#3B0764', // Purple 950
-    surfacePackingIcon: '#581C87', // Purple 900
-    surfaceFamily: '#451A03', // Amber 950
-    surfaceFamilyIcon: '#78350F', // Amber 900
-    miniBox: '#374151',    // Gray 700
-    modalBg: '#1F2937',    // Gray 800
+    background: '#111827',
+    card: '#1F2937',
+    text: '#F9FAFB',
+    textMuted: '#9CA3AF',
+    border: '#374151',
+    primary: '#6366F1',
+    surfaceBudget: '#1E1B4B',
+    surfaceBudgetIcon: '#312E81',
+    surfacePacking: '#3B0764',
+    surfacePackingIcon: '#581C87',
+    surfaceFamily: '#451A03',
+    surfaceFamilyIcon: '#78350F',
+    miniBox: '#374151',
+    modalBg: '#1F2937',
 };
 
 export const ThemeProvider = ({ children }) => {
@@ -45,7 +45,9 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         const loadTheme = async () => {
             const savedTheme = await AsyncStorage.getItem('@theme_mode');
-            setIsDarkMode(savedTheme !== null ? savedTheme === 'dark' : systemColorScheme === 'dark');
+            setIsDarkMode(
+                savedTheme !== null ? savedTheme === 'dark' : systemColorScheme === 'dark',
+            );
         };
         loadTheme();
     }, [systemColorScheme]);

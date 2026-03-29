@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useMemo } from 'react';
+import { createContext, useReducer, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const PackingContext = createContext();
@@ -25,6 +25,8 @@ const packingReducer = (state, action) => {
                 ...state,
                 items: state.items.filter((item) => item.id !== action.payload),
             };
+        case 'RESET_PACKING':
+            return { ...state, items: [] };
         default:
             return state;
     }
@@ -32,6 +34,7 @@ const packingReducer = (state, action) => {
 
 export const PackingProvider = ({ children }) => {
     const [state, dispatch] = useReducer(packingReducer, initialState);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -40,18 +43,21 @@ export const PackingProvider = ({ children }) => {
                 if (data) dispatch({ type: 'RESTORE_PACKING', payload: JSON.parse(data) });
             } catch (error) {
                 console.error('Failed to load packing data', error);
+            } finally {
+                setIsLoaded(true);
             }
         };
         load();
     }, []);
 
     useEffect(() => {
+        if (!isLoaded) return;
         try {
             AsyncStorage.setItem('@mudik_packing', JSON.stringify(state.items));
         } catch (error) {
             console.error('Failed to save packing data', error);
         }
-    }, [state.items]);
+    }, [state.items, isLoaded]);
 
     const contextValue = useMemo(() => ({ state, dispatch }), [state]);
 

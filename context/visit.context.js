@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useMemo } from 'react';
+import { createContext, useReducer, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const VisitContext = createContext();
@@ -25,6 +25,8 @@ const visitReducer = (state, action) => {
                 ...state,
                 families: state.families.filter((f) => f.id !== action.payload),
             };
+        case 'RESET_VISITS':
+            return { ...state, families: [] };
         default:
             return state;
     }
@@ -32,6 +34,7 @@ const visitReducer = (state, action) => {
 
 export const VisitProvider = ({ children }) => {
     const [state, dispatch] = useReducer(visitReducer, initialState);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -40,18 +43,21 @@ export const VisitProvider = ({ children }) => {
                 if (data) dispatch({ type: 'RESTORE_VISITS', payload: JSON.parse(data) });
             } catch (error) {
                 console.error('Failed to load visit data', error);
+            } finally {
+                setIsLoaded(true);
             }
         };
         load();
     }, []);
 
     useEffect(() => {
+        if (!isLoaded) return;
         try {
             AsyncStorage.setItem('@mudik_visits', JSON.stringify(state.families));
         } catch (error) {
             console.error('Failed to save visit data', error);
         }
-    }, [state.families]);
+    }, [state.families, isLoaded]);
 
     const contextValue = useMemo(() => ({ state, dispatch }), [state]);
 
