@@ -21,13 +21,13 @@ export const TabNavigator = () => {
                     borderTopColor: colors.border,
                 },
 
-                tabBarIcon: ({ color, size }) => {
+                tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
 
-                    if (route.name === 'Home') iconName = 'home-outline';
-                    if (route.name === 'Budget') iconName = 'wallet-outline';
-                    if (route.name === 'Item') iconName = 'checkbox-outline';
-                    if (route.name === 'Family') iconName = 'people-outline';
+                    if (route.name === 'Home') iconName = focused ? 'home' : 'home-outline';
+                    if (route.name === 'Budget') iconName = focused ? 'wallet' : 'wallet-outline';
+                    if (route.name === 'Item') iconName = focused ? 'checkbox' : 'checkbox-outline';
+                    if (route.name === 'Family') iconName = focused ? 'people' : 'people-outline';
 
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
