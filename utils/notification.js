@@ -1,20 +1,27 @@
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { useTheme } from '../hooks/use.theme';
+import Animated from 'react-native-reanimated';
+import { useRotation } from '../hooks/use.rotation';
 
 export const CustomTopNotification = ({ visible, onClose, title, message }) => {
     const { colors } = useTheme();
+    const { animatedStyle, toggleRotation } = useRotation();
 
     useEffect(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
         if (!visible) return;
+
+        toggleRotation(); // Putar ikon secara otomatis saat notif muncul
 
         const timerId = setTimeout(() => {
             onClose();
         }, 4000);
 
         return () => clearTimeout(timerId);
-    }, [visible, onClose]);
+    }, [visible]);
 
     return visible ? (
         <View style={styles.overlay} pointerEvents="box-none">
@@ -22,9 +29,15 @@ export const CustomTopNotification = ({ visible, onClose, title, message }) => {
                 style={[styles.popupContainer, { backgroundColor: colors.modalBg }]}
                 pointerEvents="auto"
             >
-                <View style={styles.iconBg}>
-                    <Ionicons name="alert-circle" size={24} color="#EF4444" />
-                </View>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={toggleRotation}
+                    style={styles.iconBg}
+                >
+                    <Animated.View style={animatedStyle}>
+                        <Ionicons name="alert-circle" size={24} color="#EF4444" />
+                    </Animated.View>
+                </TouchableOpacity>
                 <View style={styles.textContainer}>
                     <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
                     <Text style={[styles.message, { color: colors.textMuted }]}>{message}</Text>

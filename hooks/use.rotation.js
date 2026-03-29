@@ -1,4 +1,5 @@
 import { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { useCallback } from 'react';
 
 export const useRotation = (initialValue = 0, step = 360) => {
     const rotation = useSharedValue(initialValue);
@@ -9,9 +10,9 @@ export const useRotation = (initialValue = 0, step = 360) => {
         };
     });
 
-    const toggleRotation = () => {
+    const toggleRotation = useCallback(() => {
         rotation.value = withSpring(rotation.value + step);
-    };
+    }, [step]);
 
     return { animatedStyle, toggleRotation };
 };
