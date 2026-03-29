@@ -7,6 +7,7 @@ import {
     LayoutAnimation,
     KeyboardAvoidingView,
     ScrollView,
+    Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Header } from '../components/header';
@@ -32,6 +33,8 @@ export const ItemScreen = () => {
     const addItem = () => {
         if (!newItem.trim()) return;
 
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
         const itemBaru = {
             id: Date.now().toString(),
             name: newItem,
@@ -39,7 +42,6 @@ export const ItemScreen = () => {
         };
         dispatch({ type: 'ADD_ITEM', payload: itemBaru });
         setNewItem('');
-        toggleForm();
     };
 
     const deleteItem = (id) => {
@@ -51,21 +53,21 @@ export const ItemScreen = () => {
         dispatch({ type: 'TOGGLE_ITEM', payload: id });
     };
 
-    const unvisitedData = items.filter((i) => !i.checked);
-    const visitedData = items.filter((i) => i.checked);
+    const unpackedData = items.filter((i) => !i.checked);
+    const packedData = items.filter((i) => i.checked);
 
     const sectionData = [
         {
-            title: `Belum Packing (${unvisitedData.length})`,
+            title: `Belum Packing (${unpackedData.length})`,
             iconName: 'time',
             iconColor: '#F59E0B',
-            data: unvisitedData,
+            data: unpackedData,
         },
         {
-            title: `Sudah Packing (${visitedData.length})`,
+            title: `Sudah Packing (${packedData.length})`,
             iconName: 'checkmark-circle',
             iconColor: '#10B981',
-            data: visitedData,
+            data: packedData,
         },
     ].filter((section) => section.data.length > 0);
 
@@ -176,7 +178,6 @@ export const ItemScreen = () => {
                                     ]}
                                     activeOpacity={1}
                                     onPress={() => {
-                                        // Tutup swipe row sebelum item dipindah section
                                         if (rowMap[item.id]) {
                                             rowMap[item.id].closeRow();
                                         }
@@ -189,6 +190,7 @@ export const ItemScreen = () => {
                                             { color: colors.text },
                                             item.checked && styles.itemChecked,
                                         ]}
+                                    numberOfLines={1}
                                     >
                                         {item.name}
                                     </Text>
@@ -219,7 +221,7 @@ export const ItemScreen = () => {
                 />
             </View>
 
-            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={25}>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={25}>
                 <View style={styles.formContainerWrapper}>
                     <View
                         style={[
@@ -267,6 +269,7 @@ export const ItemScreen = () => {
                                     placeholderTextColor={colors.textMuted}
                                     autoFocus={true}
                                     onSubmitEditing={addItem}
+                                    blurOnSubmit={false}
                                 />
 
                                 <TouchableOpacity

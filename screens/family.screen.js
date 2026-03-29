@@ -8,6 +8,7 @@ import {
     Linking,
     KeyboardAvoidingView,
     ScrollView,
+    Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -37,6 +38,8 @@ export const FamilyScreen = () => {
     const addFamily = () => {
         if (!name.trim() || !address.trim()) return;
 
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
         const newFamily = {
             id: Date.now().toString(),
             name,
@@ -53,7 +56,6 @@ export const FamilyScreen = () => {
         setRelation('');
         setPhone('');
         setNotes('');
-        toggleForm();
     };
 
     const deleteFamily = (id) => {
@@ -169,13 +171,12 @@ export const FamilyScreen = () => {
                             </Text>
                         </View>
                     )}
-                    renderItem={({ item }) => {
+                    renderItem={(data, rowMap) => {
+                        const { item } = data;
                         const initial = item.name ? item.name.charAt(0).toUpperCase() : '?';
 
                         return (
-                            <View
-                                style={styles.itemWrapper}
-                            >
+                            <View style={styles.itemWrapper}>
                                 <TouchableOpacity
                                     style={[
                                         styles.itemCard,
@@ -189,9 +190,12 @@ export const FamilyScreen = () => {
                                         },
                                     ]}
                                     activeOpacity={1}
-                                    onPress={() =>
-                                        dispatch({ type: 'TOGGLE_VISIT', payload: item.id })
-                                    }
+                                    onPress={() => {
+                                        if (rowMap[item.id]) {
+                                            rowMap[item.id].closeRow();
+                                        }
+                                        dispatch({ type: 'TOGGLE_VISIT', payload: item.id });
+                                    }}
                                 >
                                     <View
                                         style={[
@@ -223,6 +227,7 @@ export const FamilyScreen = () => {
                                                     { color: colors.text },
                                                     item.visited && styles.strikethrough,
                                                 ]}
+                                                numberOfLines={1}
                                             >
                                                 {item.name}
                                             </Text>
@@ -248,6 +253,7 @@ export const FamilyScreen = () => {
                                                     styles.itemAddress,
                                                     { color: colors.textMuted },
                                                 ]}
+                                                numberOfLines={1}
                                             >
                                                 {item.address}
                                             </Text>
@@ -276,6 +282,7 @@ export const FamilyScreen = () => {
                                                             marginLeft: 4,
                                                         },
                                                     ]}
+                                                    numberOfLines={1}
                                                 >
                                                     {item.phone}
                                                 </Text>
@@ -304,6 +311,7 @@ export const FamilyScreen = () => {
                                                             marginLeft: 4,
                                                         },
                                                     ]}
+                                                    numberOfLines={1}
                                                 >
                                                     {item.notes}
                                                 </Text>
@@ -320,11 +328,16 @@ export const FamilyScreen = () => {
                             </View>
                         );
                     }}
-                    renderHiddenItem={({ item }) => (
+                    renderHiddenItem={(data, rowMap) => (
                         <View style={styles.rowBack}>
                             <TouchableOpacity
                                 style={styles.deleteButton}
-                                onPress={() => deleteFamily(item.id)}
+                                onPress={() => {
+                                    if (rowMap[data.item.id]) {
+                                        rowMap[data.item.id].closeRow();
+                                    }
+                                    deleteFamily(data.item.id);
+                                }}
                             >
                                 <Ionicons name="trash" size={16} color="#fff" />
                             </TouchableOpacity>
@@ -333,7 +346,10 @@ export const FamilyScreen = () => {
                 />
             </View>
 
-            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={25}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                keyboardVerticalOffset={25}
+            >
                 <View style={styles.formContainerWrapper}>
                     <View
                         style={[
@@ -366,7 +382,11 @@ export const FamilyScreen = () => {
                         </TouchableOpacity>
 
                         {isExpanded && (
-                            <ScrollView style={styles.formContent} bounces={false}>
+                            <ScrollView
+                                style={styles.formContent}
+                                bounces={false}
+                                keyboardShouldPersistTaps="handled"
+                            >
                                 <TextInput
                                     placeholder="Nama Lengkap"
                                     value={name}
