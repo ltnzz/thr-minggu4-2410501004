@@ -25,9 +25,21 @@ Aplikasi ini menggunakan berbagai hooks bawaan React maupun custom hooks untuk m
     - `useTheme`: Mengelola state Dark/Light mode di seluruh aplikasi.
     - `useRotation`: Membungkus logika animasi `react-native-reanimated` agar modular dan bisa dipakai ulang.
 
+## Dependensi Utama
+
+Aplikasi ini dibangun menggunakan teknologi dan _library_ berikut untuk memaksimalkan fitur serta UX:
+
+- **Expo & React Native**: Framework utama pengembangan aplikasi.
+- **React Navigation (`@react-navigation/bottom-tabs`)**: Mengelola _routing_ dan navigasi bawah antar layar utama.
+- **React Native Reanimated**: Membuat animasi UI interaktif yang sangat _smooth_ (misal: rotasi ikon notice dan _toggle_ tema).
+- **AsyncStorage (`@react-native-async-storage/async-storage`)**: Menyimpan seluruh data _state_ (budget, barang, kunjungan) secara lokal agar tidak hilang saat aplikasi ditutup (_persistent storage_).
+- **React Native Swipe List View**: Mengimplementasikan gestur _swipe-to-delete_ pada daftar barang dan kunjungan keluarga.
+- **React Native Community Slider**: Komponen penggeser interaktif untuk mengatur _budget_, jarak tempuh, dan biaya operasional.
+- **Jest & Jest-Expo**: Digunakan untuk pengujian otomatis (_unit testing_) pada logika aplikasi.
+
 ## Screenshot
 
-<div style="display: flex; flex-direction: row; gap: 10px;">
+<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; justify-content: center;">
   <img src="./screenshots/home-screen.jpeg" alt="Home Screen" width="250"/>
   <img src="./screenshots/budget-screen.jpeg" alt="Budget Screen" width="250"/>
   <img src="./screenshots/item-screen.jpeg" alt="Item Screen" width="250"/>
