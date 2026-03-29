@@ -40,10 +40,10 @@ Aplikasi ini dibangun menggunakan teknologi dan _library_ berikut untuk memaksim
 ## Screenshot
 
 <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; justify-content: center;">
-  <img src="./screenshots/home-screen.jpeg" alt="Home Screen" width="250"/>
-  <img src="./screenshots/budget-screen.jpeg" alt="Budget Screen" width="250"/>
-  <img src="./screenshots/item-screen.jpeg" alt="Item Screen" width="250"/>
-  <img src="./screenshots/family-screen.jpeg" alt="Family Screen" width="250"/>
+  <img src="./screenshots/home-screen.jpeg" alt="Home Screen" width="200"/>
+  <img src="./screenshots/budget-screen.jpeg" alt="Budget Screen" width="200"/>
+  <img src="./screenshots/item-screen.jpeg" alt="Item Screen" width="200"/>
+  <img src="./screenshots/family-screen.jpeg" alt="Family Screen" width="200"/>
 </div>
 
 ## Cara Menjalankan
