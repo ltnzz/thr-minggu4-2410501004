@@ -7,7 +7,6 @@ import { VisitProvider } from './context/visit.context';
 import { ThemeProvider } from './context/theme.context';
 import { Platform, UIManager } from 'react-native';
 
-// Wajib untuk mengaktifkan efek LayoutAnimation di OS Android
 if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
         UIManager.setLayoutAnimationEnabledExperimental(true);
